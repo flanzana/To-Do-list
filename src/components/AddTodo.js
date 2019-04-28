@@ -1,7 +1,9 @@
 import React from 'react';
+import { store } from "../store";
 
-// presentational component
-const AddTodo = ({ onAddClick }) => {
+let nextTodoId = 0;
+
+const AddTodo = () => {
   let input;
 
   return (
@@ -9,7 +11,11 @@ const AddTodo = ({ onAddClick }) => {
       <input ref={node => input = node} />
       <button
         onClick={() => {
-          onAddClick(input.value);
+          store.dispatch({
+            type: 'ADD_TODO',
+            id: nextTodoId++,
+            text: input.value
+          });
           // after button is clicked (action dispatched), the field is cleared
           input.value = '';
         }}

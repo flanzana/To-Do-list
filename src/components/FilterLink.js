@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Component } from 'react';
+import { store } from '../store';
 
 // presentational component
-const FilterLink = ({ filter, currentFilter, onClick, children }) => {
-  if (filter === currentFilter) {
+const Link = ({ active, onClick, children }) => {
+  if (active) {
     return <span>{children}</span>;
   }
 
@@ -10,12 +11,47 @@ const FilterLink = ({ filter, currentFilter, onClick, children }) => {
     <a href='#'
        onClick={e => {
          e.preventDefault();
-         onClick(filter);
+         onClick();
        }}
     >
       {children}
     </a>
   );
 };
+
+// container component
+class FilterLink extends Component {
+  // everytime that store changes, we will force it to update
+  componentDidMount() {
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    );
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  render() {
+    const props = this.props;
+    const state = store.getState();
+
+    return (
+      <Link
+        active={
+          props.filter === state.visibilityFilter
+        }
+        onClick={() =>
+          store.dispatch({
+            type: 'SET_VISIBILITY_FILTER',
+            filter: props.filter
+          })
+        }
+      >
+        {props.children}
+      </Link>
+    );
+  }
+}
 
 export default FilterLink
