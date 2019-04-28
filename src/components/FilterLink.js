@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { store } from '../store';
+import PropTypes from 'prop-types';
 
 // presentational component
 const Link = ({ active, onClick, children }) => {
@@ -23,6 +23,7 @@ const Link = ({ active, onClick, children }) => {
 class FilterLink extends Component {
   // everytime that store changes, we will force it to update
   componentDidMount() {
+    const { store } = this.context;
     this.unsubscribe = store.subscribe(() =>
       this.forceUpdate()
     );
@@ -34,6 +35,7 @@ class FilterLink extends Component {
 
   render() {
     const props = this.props;
+    const { store } = this.context;
     const state = store.getState();
 
     return (
@@ -53,5 +55,9 @@ class FilterLink extends Component {
     );
   }
 }
+
+FilterLink.contextTypes = {
+  store: PropTypes.object
+};
 
 export default FilterLink

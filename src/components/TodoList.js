@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import TodoItem from "./TodoItem";
-import { store } from "../store";
+import PropTypes from 'prop-types';
 
 // presentational component
 const TodoList = ({ todos, onTodoClick }) => (
@@ -38,6 +38,7 @@ const getVisibleTodos = (
 // container component
 class VisibleTodoList extends Component {
   componentDidMount() {
+    const { store } = this.context;
     this.unsubscribe = store.subscribe(() =>
       this.forceUpdate()
     );
@@ -48,6 +49,7 @@ class VisibleTodoList extends Component {
   }
 
   render() {
+    const { store } = this.context;
     const state = store.getState();
 
     return (
@@ -68,5 +70,8 @@ class VisibleTodoList extends Component {
     );
   }
 }
+VisibleTodoList.contextTypes = {
+  store: PropTypes.object
+};
 
 export default VisibleTodoList
