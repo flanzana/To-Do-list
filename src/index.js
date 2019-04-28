@@ -6,7 +6,10 @@ import * as serviceWorker from './serviceWorker';
 import { store } from './store';
 
 const render = () => {
-  ReactDOM.render(<App />, document.getElementById('root'));
+  ReactDOM.render(
+    <App {...store.getState()} />,
+    document.getElementById('root')
+  );
   serviceWorker.unregister();
 };
 render();
