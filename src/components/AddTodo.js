@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { addTodo } from "../actions";
+// import PropTypes from 'prop-types';
 
-let nextTodoId = 0;
-
-const AddTodo = (props, { store }) => {
+const AddTodo = ({ dispatch }) => {
   let input;
 
   return (
@@ -11,11 +11,7 @@ const AddTodo = (props, { store }) => {
       <input ref={node => input = node} />
       <button
         onClick={() => {
-          store.dispatch({
-            type: 'ADD_TODO',
-            id: nextTodoId++,
-            text: input.value
-          });
+          dispatch(addTodo(input.value));
           // after button is clicked (action dispatched), the field is cleared
           input.value = '';
         }}
@@ -25,9 +21,14 @@ const AddTodo = (props, { store }) => {
     </div>
   );
 };
+// // context is unstable API so better to avoid it in your code
+// AddTodo.contextTypes = {
+//   store: PropTypes.object
+// };
 
-AddTodo.contextTypes = {
-  store: PropTypes.object
-};
-
-export default AddTodo
+// as state is null and dispatch will always render dispatch, we do not need to write anything in connect
+// export default connect(
+//   state => {return {}},
+//   dispatch => { return { dispatch }}
+// )(AddTodo)
+export default connect()(AddTodo)
